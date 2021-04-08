@@ -24,9 +24,9 @@ Input Encoded Text
     ${text}=    Replace String    ${text}    ${SPACE}    {VK_SPACE}
     ${text}=    Replace String    ${text}    \n    {ENTER}
     IF    "${locator}" != "${NONE}"
-    Type Into    ${locator}    ${text}
+        Type Into    ${locator}    ${text}
     ELSE
-    Send Keys    ${text}{ENTER}
+        Send Keys    ${text}{ENTER}
     END
 
 *** Keywords ***
@@ -35,7 +35,7 @@ Is Window With Title Already Open
     ${windowlist}=    Get Window List
     FOR    ${window}    IN    @{windowlist}
         IF    "${expected_title}" in "${window}[title]"
-        Return From Keyword    ${TRUE}
+            Return From Keyword    ${TRUE}
         END
     END
     [Return]    ${FALSE}
@@ -46,9 +46,9 @@ Minimal task
     Desktop.Set Clipboard Value    ${ATTACHMENT_FILEPATH}
     ${isopen}=    Is Window With Title Already Open    ${outlook_title}
     IF    ${isopen}
-    Open Dialog    ${outlook_title}    wildcard=True
+        Open Dialog    ${outlook_title}    wildcard=True
     ELSE
-    Open From Search    outlook    ${outlook_title}    wildcard=True    timeout=20
+        Open From Search    outlook    ${outlook_title}    wildcard=True    timeout=20
     END
     Mouse Click    ${LOCATOR_NEW_EMAIL}
     Refresh Window
