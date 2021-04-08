@@ -6,6 +6,8 @@ tasks:
       - robot
       - --report
       - NONE
+      - -L
+      - TRACE
       - --outputdir
       - output
       - --logtitle
