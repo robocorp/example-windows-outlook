@@ -2,11 +2,11 @@
 Library           RPA.Desktop.Windows
 Library           RPA.Desktop    WITH NAME    Desktop
 Library           RPA.FileSystem
+Library           OperatingSystem
 Library           String
 
 *** Variables ***
 ${ACCOUNT_NAME}    mika@beissi.onmicrosoft.com
-${DEFAULT_MAIL_RECIPIENT}    mika@robocorp.com
 ${DEFAULT_MAIL_SUBJECT}    Coming from Robot
 ${DEFAULT_MAIL_BODY}    Default message from the RPA process
 ${LOCATOR_NEW_EMAIL}    name:'New Email' and type:Button
@@ -63,6 +63,9 @@ Paste text from clipboard to element
 
 *** Keywords ***
 Set Variables for the Task
+    Environment Variable Should Be Set    EMAIL_RECIPIENT
+    ...    Environment variable 'EMAIL_RECIPIENT' needs to be set
+    Set Task Variable    ${email_recipient}    %{EMAIL_RECIPIENT}
     Set Task Variable    ${outlook_title}    ${ACCOUNT_NAME} - Outlook
     ${does_email_body_exist}=    Does File Exist    ${EMAIL_BODY_FILEPATH}
     Set Task Variable    ${email_body}    %{BODY=${DEFAULT_MAIL_BODY}}
@@ -76,7 +79,7 @@ Use New Email button to Send Email
     Mouse Click    ${LOCATOR_NEW_EMAIL}
     Refresh Window
     Open Dialog    Untitled    wildcard=True
-    Input Encoded Text    %{RECIPIENT=${DEFAULT_MAIL_RECIPIENT}}    ${LOCATOR_EMAIL_TO}
+    Input Encoded Text    ${email_recipient}    ${LOCATOR_EMAIL_TO}
     Input Encoded Text    %{SUBJECT=${DEFAULT_MAIL_SUBJECT}}    ${LOCATOR_EMAIL_SUBJECT}
     Paste text from clipboard to element    ${email_body}    ${LOCATOR_EMAIL_BODY}
     Paste text from clipboard to element    ${ATTACHMENT_FILEPATH}    ${SHORTCUT_INSERT_FILE}    method=keys
