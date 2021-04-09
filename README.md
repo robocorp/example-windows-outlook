@@ -34,3 +34,11 @@ Click `New Email` button on fill in information into opened dialog and send the 
 - Clipboard is used in some places to paste text into input fields / textareas instead of sending keystrokes. The clipboard is cleared just in case in the `Task Teardown` step.
 - Email body text is read from the `email_body.txt` or file defined by `EMAIL_BODY` environment variable if either exists. File content can include `<ATTACHMENT_TEXT>` text which will be replaced with the text information the filename of the attachment.
 - Robot Framework IF/ELSE syntax is in use to make process more readable.
+
+## Further reading
+
+- [Desktop automation](https://robocorp.com/docs/development-guide/desktop)
+- [Windows Robots in the Portal](https://robocorp.com/portal/search?q=windows)
+- [RPA.Desktop.Windows library](https://robocorp.com/docs/libraries/rpa-framework/rpa-desktop-windows)
+- [RPA.Desktop library](https://robocorp.com/docs/libraries/rpa-framework/rpa-desktop)
+- [RPA.FileSystem library](https://robocorp.com/docs/libraries/rpa-framework/rpa-filesystem)
