@@ -1,9 +1,7 @@
 Greetings!
 
 This email has been sent by Robocorp Robot.
-
-Included in the email is example invoice PDF which you can safely ignore (no need to pay anything).
-
+<ATTACHMENT_TEXT>
 You can find my source at https://github.com/robocorp/demo-windows-outlook
 
 Best Regards,

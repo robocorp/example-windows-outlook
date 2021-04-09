@@ -16,7 +16,6 @@ ${LOCATOR_EMAIL_BODY}    type:Document
 ${LOCATOR_EMAIL_SEND}    name:Send and type:Button
 ${LOCATOR_INSERT_FILE}    name:'File name:' and type:Edit
 ${SHORTCUT_INSERT_FILE}    %NAFB
-${ATTACHMENT_FILEPATH}    ${CURDIR}${/}invoice.pdf
 ${EMAIL_BODY_FILEPATH}    ${CURDIR}${/}email_body.txt
 
 *** Keywords ***
@@ -67,22 +66,40 @@ Set Variables for the Task
     ...    Environment variable 'EMAIL_RECIPIENT' needs to be set
     Set Task Variable    ${email_recipient}    %{EMAIL_RECIPIENT}
     Set Task Variable    ${outlook_title}    ${ACCOUNT_NAME} - Outlook
-    ${does_email_body_exist}=    Does File Exist    ${EMAIL_BODY_FILEPATH}
+    ${email_body_exist}=    Does File Exist    ${EMAIL_BODY_FILEPATH}
     Set Task Variable    ${email_body}    %{BODY=${DEFAULT_MAIL_BODY}}
-    IF    ${does_email_body_exist}
+    IF    ${email_body_exist}
         ${email_body}=    Read File    ${EMAIL_BODY_FILEPATH}
         Set Task Variable    ${email_body}    ${email_body}
     END
+
+*** Keywords ***
+Add Attachment If It Has Been Given
+    Set Task Variable    ${attachment_filepath}    %{EMAIL_ATTACHMENT=${NONE}}
+    IF    "${attachment_filepath}" != "${NONE}"
+        File Should Exist    ${attachment_filepath}
+        ...    Given attachment `${attachment_filepath}` does not exist
+        Paste text from clipboard to element    ${attachment_filepath}    ${SHORTCUT_INSERT_FILE}    method=keys
+        ${filename}=    Get File Name    ${attachment_filepath}
+        ${email_body}=    Replace String    ${email_body}
+        ...    <ATTACHMENT_TEXT>
+        ...    \nThere is attachment in the email: \n\t${filename}\n
+    ELSE
+        ${email_body}=    Replace String    ${email_body}
+        ...    <ATTACHMENT_TEXT>
+        ...    ${EMPTY}
+    END
+    Set Task Variable    ${email_body}    ${email_body}
 
 *** Keywords ***
 Use New Email button to Send Email
     Mouse Click    ${LOCATOR_NEW_EMAIL}
     Refresh Window
     Open Dialog    Untitled    wildcard=True
+    Add Attachment If It Has Been Given
     Input Encoded Text    ${email_recipient}    ${LOCATOR_EMAIL_TO}
     Input Encoded Text    %{SUBJECT=${DEFAULT_MAIL_SUBJECT}}    ${LOCATOR_EMAIL_SUBJECT}
     Paste text from clipboard to element    ${email_body}    ${LOCATOR_EMAIL_BODY}
-    Paste text from clipboard to element    ${ATTACHMENT_FILEPATH}    ${SHORTCUT_INSERT_FILE}    method=keys
     Mouse Click    ${LOCATOR_EMAIL_SEND}
 
 *** Tasks ***
