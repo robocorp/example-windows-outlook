@@ -41,32 +41,51 @@ Is Window With Title Already Open
     END
     [Return]    ${FALSE}
 
-*** Tasks ***
-Sending Email From Outlook application
-    ${outlook_title}=    Set Variable    ${ACCOUNT_NAME} - Outlook
-    ${does_email_body_exist}=    Does File Exist    ${EMAIL_BODY_FILEPATH}
-    ${email_body}=    Set Variable    %{BODY=${DEFAULT_MAIL_BODY}}
-    IF    ${does_email_body_exist}
-        ${email_body}=    Read File    ${EMAIL_BODY_FILEPATH}
-    END
+*** Keywords ***
+Open Outlook or use already open Outlook
     ${isopen}=    Is Window With Title Already Open    ${outlook_title}
     IF    ${isopen}
         Open Dialog    ${outlook_title}    wildcard=True
     ELSE
         Open From Search    outlook    ${outlook_title}    wildcard=True    timeout=20
     END
+
+*** Keywords ***
+Paste text from clipboard to element
+    [Arguments]    ${text}    ${target}    ${method}=mouse
+    Desktop.Set Clipboard Value    ${text}
+    IF    "${method}" == "mouse"
+        Mouse Click    ${target}
+    ELSE IF    "${method}" == "keys"
+        Send Keys    ${target}
+    END
+    Send Keys    ^v{ENTER}
+
+*** Keywords ***
+Set Variables for the Task
+    Set Task Variable    ${outlook_title}    ${ACCOUNT_NAME} - Outlook
+    ${does_email_body_exist}=    Does File Exist    ${EMAIL_BODY_FILEPATH}
+    Set Task Variable    ${email_body}    %{BODY=${DEFAULT_MAIL_BODY}}
+    IF    ${does_email_body_exist}
+        ${email_body}=    Read File    ${EMAIL_BODY_FILEPATH}
+        Set Task Variable    ${email_body}    ${email_body}
+    END
+
+*** Keywords ***
+Use New Email button to Send Email
     Mouse Click    ${LOCATOR_NEW_EMAIL}
     Refresh Window
     Open Dialog    Untitled    wildcard=True
     Input Encoded Text    %{RECIPIENT=${DEFAULT_MAIL_RECIPIENT}}    ${LOCATOR_EMAIL_TO}
     Input Encoded Text    %{SUBJECT=${DEFAULT_MAIL_SUBJECT}}    ${LOCATOR_EMAIL_SUBJECT}
-    Desktop.Set Clipboard Value    ${email_body}
-    Mouse Click    ${LOCATOR_EMAIL_BODY}
-    Send Keys    ^v{ENTER}
-    Send Keys    ${SHORTCUT_INSERT_FILE}
-    Sleep    2s
-    Desktop.Set Clipboard Value    ${ATTACHMENT_FILEPATH}
-    Send Keys    ^v{ENTER}
-    Send Keys    {ENTER}
+    Paste text from clipboard to element    ${email_body}    ${LOCATOR_EMAIL_BODY}
+    Paste text from clipboard to element    ${ATTACHMENT_FILEPATH}    ${SHORTCUT_INSERT_FILE}    method=keys
     Mouse Click    ${LOCATOR_EMAIL_SEND}
+
+*** Tasks ***
+Sending Email From Outlook application
+    [Teardown]    Clear Clipboard
+    Set Variables for the Task
+    Open Outlook or use already open Outlook
+    Use New Email button to Send Email
     Log    Done.
