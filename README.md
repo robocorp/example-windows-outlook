@@ -9,6 +9,20 @@ Example requires working Outlook installation on Windows system
 - `EMAIL_ATTACHMENT` (OPTIONAL). This variable defines filepath to the email attachment.
 - `EMAIL_BODY` (OPTIONAL). This variable defines filepath to the email body (text file).
 
+`email_body.txt`:
+
+```text
+Greetings!
+
+This email has been sent by Robocorp Robot.
+<ATTACHMENT_TEXT>
+You can find my source at https://github.com/robocorp/example-windows-outlook
+
+Best Regards,
+Mark the Robot
+```
+
+
 ## Task steps
 
 Task consist of three main level keywords:
