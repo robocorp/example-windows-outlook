@@ -64,13 +64,17 @@ Paste text from clipboard to element
 Set Variables for the Task
     Environment Variable Should Be Set    EMAIL_RECIPIENT
     ...    Environment variable 'EMAIL_RECIPIENT' needs to be set
+    Environment Variable Should Be Set    OUTLOOK_ACCOUNT
+    ...    Environment variable 'OUTLOOK_ACCOUNT' needs to be set
     Set Task Variable    ${email_recipient}    %{EMAIL_RECIPIENT}
+    Set Task Variable    ${account_name}    %{OUTLOOK_ACCOUNT}
     Set Task Variable    ${outlook_title}    ${ACCOUNT_NAME} - Outlook
-    ${email_body_exist}=    Does File Exist    ${EMAIL_BODY_FILEPATH}
-    Set Task Variable    ${email_body}    %{BODY=${DEFAULT_MAIL_BODY}}
+    ${email_body_exist}=    Does File Exist    %{EMAIL_BODY=${EMAIL_BODY_FILEPATH}}
     IF    ${email_body_exist}
-        ${email_body}=    Read File    ${EMAIL_BODY_FILEPATH}
+        ${email_body}=    Read File    %{EMAIL_BODY=${EMAIL_BODY_FILEPATH}}
         Set Task Variable    ${email_body}    ${email_body}
+    ELSE
+        Set Task Variable    ${email_body}    ${DEFAULT_MAIL_BODY}
     END
 
 *** Keywords ***
