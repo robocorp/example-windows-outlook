@@ -2,7 +2,7 @@ Greetings!
 
 This email has been sent by Robocorp Robot.
 <ATTACHMENT_TEXT>
-You can find my source at https://github.com/robocorp/demo-windows-outlook
+You can find my source at https://github.com/robocorp/example-windows-outlook
 
 Best Regards,
 Mark the Robot
