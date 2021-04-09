@@ -4,10 +4,10 @@ Example requires working Outlook installation on Windows system
 
 ## Environment variables
 
-    - *OUTLOOK_ACCOUNT* (REQUIRED). This variable defines Outlook account name.
-    - *EMAIL_RECIPIENT* (REQUIRED). This variable defines recipient of the email.
-    - *EMAIL_ATTACHMENT* (OPTIONAL). This variable defines filepath to the email attachment.
-    - *EMAIL_BODY* (OPTIONAL). This variable defines filepath to the email body (text file).
+    - `OUTLOOK_ACCOUNT` (REQUIRED). This variable defines Outlook account name.
+    - `EMAIL_RECIPIENT` (REQUIRED). This variable defines recipient of the email.
+    - `EMAIL_ATTACHMENT` (OPTIONAL). This variable defines filepath to the email attachment.
+    - `EMAIL_BODY` (OPTIONAL). This variable defines filepath to the email body (text file).
 
 ## Task steps
 
