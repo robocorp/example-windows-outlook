@@ -17,6 +17,7 @@ ${LOCATOR_EMAIL_SEND}    name:Send and type:Button
 ${LOCATOR_INSERT_FILE}    name:'File name:' and type:Edit
 ${SHORTCUT_INSERT_FILE}    %NAFB
 ${EMAIL_BODY_FILEPATH}    ${CURDIR}${/}email_body.txt
+${NEED_TO_CLOSE}    ${FALSE}
 
 *** Keywords ***
 Input Encoded Text
@@ -47,6 +48,7 @@ Open Outlook or use already open Outlook
         Open Dialog    ${outlook_title}    wildcard=True
     ELSE
         Open From Search    outlook    ${outlook_title}    wildcard=True    timeout=20
+        Set Global Variable    ${NEED_TO_CLOSE}    ${TRUE}
     END
 
 *** Keywords ***
@@ -106,9 +108,17 @@ Use New Email button to Send Email
     Paste text from clipboard to element    ${email_body}    ${LOCATOR_EMAIL_BODY}
     Mouse Click    ${LOCATOR_EMAIL_SEND}
 
+*** Keywords ***
+Teardown Actions
+    Clear Clipboard
+    IF    ${NEED_TO_CLOSE}
+        Open Dialog    ${outlook_title}    wildcard=True
+        Send Keys    %F%X
+    END
+
 *** Tasks ***
 Sending Email From Outlook application
-    [Teardown]    Clear Clipboard
+    [Teardown]    Teardown Actions
     Set Variables for the Task
     Open Outlook or use already open Outlook
     Use New Email button to Send Email

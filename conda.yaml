@@ -10,5 +10,4 @@ dependencies:
   - pip=20.1
   - pip:
       # Define pip packages here.
-    - rpaframework==9.4.0
-    - robotframework==4.0.1
+    - rpaframework==10.9.0
