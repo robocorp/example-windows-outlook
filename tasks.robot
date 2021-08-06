@@ -82,9 +82,8 @@ Set Variables for the Task
 *** Keywords ***
 Add Attachment If It Has Been Given
     Set Task Variable    ${attachment_filepath}    %{EMAIL_ATTACHMENT=${NONE}}
-    IF    "${attachment_filepath}" != "${NONE}"
-        File Should Exist    ${attachment_filepath}
-        ...    Given attachment `${attachment_filepath}` does not exist
+    ${file_exists}=    Does File Exist    ${attachment_filepath}
+    IF    ${file_exists}
         Paste text from clipboard to element    ${attachment_filepath}    ${SHORTCUT_INSERT_FILE}    method=keys
         ${filename}=    Get File Name    ${attachment_filepath}
         ${email_body}=    Replace String    ${email_body}
@@ -96,6 +95,7 @@ Add Attachment If It Has Been Given
         ...    ${EMPTY}
     END
     Set Task Variable    ${email_body}    ${email_body}
+    Sleep    5s
 
 *** Keywords ***
 Use New Email button to Send Email
