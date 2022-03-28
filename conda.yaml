@@ -9,5 +9,5 @@ dependencies:
   - python=3.7.5
   - pip=20.1
   - pip:
-      # Define pip packages here.
-    - rpaframework==10.9.0
+    # Define pip packages here.
+    - rpaframework==13.0.0
