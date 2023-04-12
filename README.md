@@ -1,20 +1,26 @@
-# Send emails with Outlook application
+# Send e-mails with the Outlook application on Windows
 
-Example requires working Outlook installation on Windows system
+This example requires a working Outlook installation on a Windows system and a user
+already configured and logged on.
 
-## Environment variables
+Demo recording: https://www.loom.com/share/2b516869a9564fce85660229e1d6dc26
 
-- `OUTLOOK_ACCOUNT` (REQUIRED). This variable defines Outlook account name.
-- `EMAIL_RECIPIENT` (REQUIRED). This variable defines recipient of the email.
-- `EMAIL_ATTACHMENT` (OPTIONAL). This variable defines filepath to the email attachment.
-- `EMAIL_BODY` (OPTIONAL). This variable defines filepath to the email body (text file).
+## Environment variables setup
 
-`email_body.txt`:
+- `OUTLOOK_ACCOUNT` (REQUIRED): This variable incorporates the Outlook account name.
+  (so the app window can be correctly identified and controlled)
+- `EMAIL_RECIPIENT` (REQUIRED): To whom to send the e-mail. (can be the same address as
+  above)
+- `EMAIL_ATTACHMENT` (OPTIONAL): A file path to a file to attach. (can be relative)
+- `EMAIL_BODY` (OPTIONAL): A path to a file containing the content of the e-mail body.
+  (make sure that this contains an `<ATTACHMENT_TEXT>` placeholder inside, as this
+  will be replaced by the file path you want to attach for confirmation purposes)
 
+Our default [body](devdata/email_body.txt) contains:
 ```text
 Greetings!
 
-This email has been sent by Robocorp Robot.
+This e-mail has been sent by a Robocorp robot.
 <ATTACHMENT_TEXT>
 You can find my source at https://github.com/robocorp/example-windows-outlook
 
@@ -22,37 +28,29 @@ Best Regards,
 Mark the Robot
 ```
 
+## Subtasks
 
-## Task steps
+The main task (`Send email with Outlook application on Windows`) calls the following
+keywords:
 
-Task consist of three main level keywords:
+- `Set variables for this task`: Sets the final e-mail body content.
+- `Open new Outlook or use the currently open one`: Ensures an active Outlook app open.
+- `Press New Email button and send one`: Sends the e-mail with/out an attachment.
 
-- `Set Variables for the Task`
-- `Open Outlook or Use already open Outlook`
-- `Use New Email button to Send Email`
+## Workarounds in use to improve automation efficiency
 
-### Set Variables for the Task
-
-Verifies that mandatory environment variables exist and sets necessary variables for the task.
-
-### Open Outlook or Use already open Outlook
-
-Opens Outlook application if it is not open or gets control of already open Outlook application window.
-
-### Use New Email button to Send Email
-
-Click `New Email` button on fill in information into opened dialog and send the email.
-
-## Workarounds in use to improve automation effiency
-
-- Clipboard is used in some places to paste text into input fields / textareas instead of sending keystrokes. The clipboard is cleared just in case in the `Task Teardown` step.
-- Email body text is read from the `email_body.txt` or file defined by `EMAIL_BODY` environment variable if either exists. File content can include `<ATTACHMENT_TEXT>` text which will be replaced with the text information the filename of the attachment.
-- Robot Framework IF/ELSE syntax is in use to make process more readable.
+- Clipboard is used in some places to paste text into input fields / text areas instead
+  of sending keystrokes (faster). The clipboard is cleared with the `Teardown Actions`
+  keyword.
+- A default e-mail body text is read from the [email_body.txt](devdata/email_body.txt)
+  file in the absence of a custom body provided by the `EMAIL_BODY` environment
+  variable. The file content should include an `<ATTACHMENT_TEXT>` text inside, which
+  will be replaced with the file name of the attachment (if one is provided).
 
 ## Further reading
 
 - [Desktop automation](https://robocorp.com/docs/development-guide/desktop)
-- [Windows Robots in the Portal](https://robocorp.com/portal/search?q=windows)
-- [RPA.Desktop.Windows library](https://robocorp.com/docs/libraries/rpa-framework/rpa-desktop-windows)
-- [RPA.Desktop library](https://robocorp.com/docs/libraries/rpa-framework/rpa-desktop)
-- [RPA.FileSystem library](https://robocorp.com/docs/libraries/rpa-framework/rpa-filesystem)
+- [Desktop robots in the Portal](https://robocorp.com/portal/collection/desktop-automation)
+- [`RPA.Windows` library](https://robocorp.com/docs/libraries/rpa-framework/rpa-windows)
+- [`RPA.Desktop` library](https://robocorp.com/docs/libraries/rpa-framework/rpa-desktop)
+- [`RPA.FileSystem` library](https://robocorp.com/docs/libraries/rpa-framework/rpa-filesystem)
