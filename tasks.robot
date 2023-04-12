@@ -5,6 +5,8 @@ Library    RPA.Windows    WITH NAME    Windows
 Library    OperatingSystem
 Library    String
 
+Suite Setup    Set Wait Time    1
+
 
 *** Variables ***
 ${DEFAULT_EMAIL}    mika@beissi.onmicrosoft.com
@@ -25,6 +27,7 @@ ${LOCATOR_EMAIL_SEND}    name:Send type:Button
 ${LOCATOR_INSERT_FILE}    name:"File name:" type:Edit
 
 ${NEED_TO_CLOSE}    ${False}
+${WAIT_TIME_BEFORE_CLOSE}    10s
 
 
 *** Keywords ***
@@ -44,12 +47,13 @@ Open new Outlook or use the currently open one
     [Documentation]    Opens the Outlook application if it is not open or gets into
     ...    control of an already open Outlook application window.
 
-    ${isopen} =    Is there a window with the provided title already open    ${outlook_title}
+    ${isopen} =    Is there a window with the provided title already open
+    ...    ${outlook_title}
     IF    not ${isopen}
-        Windows Run    outlook
+        Windows Run    Outlook    wait_time=${5}
         Set Global Variable    ${NEED_TO_CLOSE}    ${True}
     END
-    Control Window    subname:"${outlook_title}"
+    Control Window    desktop > subname:"${outlook_title}"
 
 Pate text into element from clipboard
     [Arguments]    ${target}    ${text}
@@ -94,8 +98,9 @@ Press New Email button and send one
     ...    opened dialog, then finally sends the e-mail. (with/out an attachment)
 
     Windows.Click    ${LOCATOR_NEW_EMAIL}
-    # All future actions are relative to this newly controlled window.
-    Control Window    ${LOCATOR_NEW_MESSAGE}
+    # All future actions are relative to this newly set anchor window. (the window for
+    #  composing the message)
+    Set Anchor    desktop > ${LOCATOR_NEW_MESSAGE}
 
     Send Keys    ${LOCATOR_EMAIL_TO}    keys=${EMAIL_RECIPIENT}
     Send Keys    ${LOCATOR_EMAIL_SUBJECT}    keys=${SUBJECT}
@@ -103,11 +108,13 @@ Press New Email button and send one
     Pate text into element from clipboard    ${LOCATOR_EMAIL_BODY}    ${email_body}
     Windows.Click    ${LOCATOR_EMAIL_SEND}
 
+    [Teardown]    Clear Anchor
+
 Teardown Actions
     Clear Clipboard
     IF    ${NEED_TO_CLOSE}
-        Log To Console    Outlook will be closed soon...
-        Sleep    5s
+        Log To Console    Outlook will be closed in ${WAIT_TIME_BEFORE_CLOSE}...
+        Sleep    ${WAIT_TIME_BEFORE_CLOSE}
         Close Current Window
     END
 
