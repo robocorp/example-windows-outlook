@@ -1,7 +1,9 @@
-# Send emails with Outlook application
+# Send e-mails with the Outlook application on Windows
 
 This example requires a working Outlook installation on a Windows system and a user
 already configured and logged on.
+
+Demo recording: https://www.loom.com/share/2b516869a9564fce85660229e1d6dc26
 
 ## Environment variables setup
 
