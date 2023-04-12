@@ -1,6 +1,6 @@
 Greetings!
 
-This email has been sent by Robocorp Robot.
+This e-mail has been sent by a Robocorp robot.
 <ATTACHMENT_TEXT>
 You can find my source at https://github.com/robocorp/example-windows-outlook
 
